@@ -11,6 +11,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using System.Collections.Generic;
+using System.Text;
 
 namespace EasyTriviaAPI
   {
@@ -18,7 +19,8 @@ namespace EasyTriviaAPI
       {
           [FunctionName("EasyTriviaAPI")]
           public static async Task<IActionResult> Run(
-              [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+              [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "{username}")] HttpRequest req,
+              string username,
               ILogger log)
           {
 
@@ -37,9 +39,10 @@ namespace EasyTriviaAPI
       }
               if (req.Method == "GET")
               {
-                string result = new StreamReader(req.Body).ReadToEnd();
-                TriviaCheck triviaCheck = JsonConvert.DeserializeObject<TriviaCheck>(result);
-                string username = triviaCheck.Username;
+
+        //string result = await new StreamReader(req.Body).ReadToEndAsync();
+        //        TriviaCheck triviaCheck = JsonConvert.DeserializeObject<TriviaCheck>(result);
+        //        string username = triviaCheck.Username;
 
                 List<BsonDocument> triviaDocumentList = CheckTrivia(collection, username);
                 TriviaResult triviaResult = new TriviaResult();
